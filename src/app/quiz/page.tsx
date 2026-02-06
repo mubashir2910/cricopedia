@@ -214,12 +214,11 @@ export default function QuizHubPage() {
                                                 </span>
                                             </div>
 
-                                            {/* Only show question text for LIVE quizzes */}
+                                            {/* Never show question text on listing - prevent cheating */}
                                             {isLive ? (
-                                                <p className="text-white font-medium mb-3">
-                                                    {quiz.questionText.length > 100
-                                                        ? quiz.questionText.substring(0, 100) + '...'
-                                                        : quiz.questionText}
+                                                <p className="text-amber-400 font-medium mb-3 flex items-center gap-2">
+                                                    <span className="text-xl">🔒</span>
+                                                    <span>Click to attempt - Question revealed after timer starts!</span>
                                                 </p>
                                             ) : (
                                                 <p className="text-slate-400 italic mb-3">
@@ -234,7 +233,7 @@ export default function QuizHubPage() {
                                             {isLive && (
                                                 <div className="mt-4">
                                                     <span className="px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 font-medium text-sm">
-                                                        Answer Now →
+                                                        🎯 Attempt Now →
                                                     </span>
                                                 </div>
                                             )}

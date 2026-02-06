@@ -90,7 +90,26 @@ export async function GET(request: NextRequest) {
             return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
         });
 
-        return NextResponse.json({ quizzes: filteredQuizzes });
+        // For non-admin users, hide question text and options to prevent cheating
+        // Users can only see the question after starting an attempt (which starts the timer)
+        let responseQuizzes = filteredQuizzes;
+        if (!session?.user?.isAdmin) {
+            responseQuizzes = filteredQuizzes.map((quiz: any) => {
+                // Only hide for live/scheduled quizzes - ended quizzes can show content
+                if (quiz.computedStatus === 'live' || quiz.computedStatus === 'scheduled') {
+                    const { questionText, optionA, optionB, correctOption, ...safeQuiz } = quiz;
+                    return {
+                        ...safeQuiz,
+                        questionText: '[Hidden until attempt starts]',
+                        optionA: '[Hidden]',
+                        optionB: '[Hidden]',
+                    };
+                }
+                return quiz;
+            });
+        }
+
+        return NextResponse.json({ quizzes: responseQuizzes });
     } catch (error) {
         console.error('Get quizzes error:', error);
         return NextResponse.json(
