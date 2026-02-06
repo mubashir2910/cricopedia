@@ -147,7 +147,7 @@ export default function MatchDetailPage() {
     const predictionStartDate = match.predictionStartDate ? new Date(match.predictionStartDate) : null;
     const predictionDeadline = new Date(match.predictionDeadline);
 
-    const isPredictionNotStarted = predictionStartDate && now < predictionStartDate;
+    const isPredictionNotStarted = !!(predictionStartDate && now < predictionStartDate);
     const isPredictionOpen = !isPredictionNotStarted && now < predictionDeadline;
     const isPredictionLocked = now >= predictionDeadline;
     const isCompleted = match.status === 'completed';
