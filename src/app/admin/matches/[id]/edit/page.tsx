@@ -51,17 +51,30 @@ export default function EditMatchPage() {
 
                 if (res.ok) {
                     setMatch(data.match);
+
+                    // Format dates in local timezone for datetime-local input
+                    // toISOString() returns UTC, we need local time format
+                    const formatLocalDateTime = (dateStr: string) => {
+                        const date = new Date(dateStr);
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const hours = String(date.getHours()).padStart(2, '0');
+                        const minutes = String(date.getMinutes()).padStart(2, '0');
+                        return `${year}-${month}-${day}T${hours}:${minutes}`;
+                    };
+
                     setFormData({
                         title: data.match.title,
                         teamA: data.match.teamA,
                         teamB: data.match.teamB,
                         teamAFlag: data.match.teamAFlag || '',
                         teamBFlag: data.match.teamBFlag || '',
-                        matchDate: new Date(data.match.matchDate).toISOString().slice(0, 16),
+                        matchDate: formatLocalDateTime(data.match.matchDate),
                         predictionStartDate: data.match.predictionStartDate
-                            ? new Date(data.match.predictionStartDate).toISOString().slice(0, 16)
+                            ? formatLocalDateTime(data.match.predictionStartDate)
                             : '',
-                        predictionDeadline: new Date(data.match.predictionDeadline).toISOString().slice(0, 16),
+                        predictionDeadline: formatLocalDateTime(data.match.predictionDeadline),
                         status: data.match.status,
                     });
                 }
@@ -84,10 +97,20 @@ export default function EditMatchPage() {
         setSuccess('');
 
         try {
+            // Convert datetime-local values to proper ISO strings with timezone
+            const matchDateISO = formData.matchDate ? new Date(formData.matchDate).toISOString() : '';
+            const predictionStartDateISO = formData.predictionStartDate ? new Date(formData.predictionStartDate).toISOString() : '';
+            const predictionDeadlineISO = formData.predictionDeadline ? new Date(formData.predictionDeadline).toISOString() : '';
+
             const res = await fetch(`/api/matches/${params.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    matchDate: matchDateISO,
+                    predictionStartDate: predictionStartDateISO,
+                    predictionDeadline: predictionDeadlineISO,
+                }),
             });
 
             const data = await res.json();

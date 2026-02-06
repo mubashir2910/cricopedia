@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import PasswordInput from '@/components/PasswordInput';
 
 export default function ForgotPasswordPage() {
     const router = useRouter();
@@ -146,8 +147,8 @@ export default function ForgotPasswordPage() {
                         <div
                             key={s}
                             className={`w-3 h-3 rounded-full transition-colors ${i <= ['email', 'otp', 'password'].indexOf(step)
-                                    ? 'bg-emerald-400'
-                                    : 'bg-slate-600'
+                                ? 'bg-emerald-400'
+                                : 'bg-slate-600'
                                 }`}
                         />
                     ))}
@@ -241,11 +242,9 @@ export default function ForgotPasswordPage() {
                                 <label className="block text-sm font-medium text-slate-300 mb-2">
                                     New Password
                                 </label>
-                                <input
-                                    type="password"
+                                <PasswordInput
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="input"
                                     placeholder="At least 6 characters"
                                     required
                                 />
@@ -255,11 +254,9 @@ export default function ForgotPasswordPage() {
                                 <label className="block text-sm font-medium text-slate-300 mb-2">
                                     Confirm Password
                                 </label>
-                                <input
-                                    type="password"
+                                <PasswordInput
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="input"
                                     placeholder="Confirm your password"
                                     required
                                 />

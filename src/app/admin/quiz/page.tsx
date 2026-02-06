@@ -115,8 +115,8 @@ export default function AdminQuizListPage() {
                             key={status}
                             onClick={() => setFilter(status)}
                             className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${filter === status
-                                    ? 'bg-emerald-500/20 text-emerald-400'
-                                    : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50'
+                                ? 'bg-emerald-500/20 text-emerald-400'
+                                : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50'
                                 }`}
                         >
                             {status || 'All'} {status === '' ? `(${quizzes.length})` : ''}
@@ -206,12 +206,9 @@ export default function AdminQuizListPage() {
                                         )}
                                         {quiz.status === 'scheduled' && (
                                             <>
-                                                <button
-                                                    onClick={() => updateStatus(quiz._id, 'live')}
-                                                    className="px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 text-sm hover:bg-emerald-500/30"
-                                                >
-                                                    Go Live
-                                                </button>
+                                                <span className="px-3 py-1.5 text-blue-400 text-xs">
+                                                    Auto-live at start time
+                                                </span>
                                                 <Link
                                                     href={`/admin/quiz/${quiz._id}`}
                                                     className="px-3 py-1.5 rounded-lg bg-slate-700/50 text-slate-300 text-sm hover:bg-slate-600/50"
@@ -221,12 +218,9 @@ export default function AdminQuizListPage() {
                                             </>
                                         )}
                                         {quiz.status === 'live' && (
-                                            <button
-                                                onClick={() => updateStatus(quiz._id, 'ended')}
-                                                className="px-3 py-1.5 rounded-lg bg-red-500/20 text-red-400 text-sm hover:bg-red-500/30"
-                                            >
-                                                End Quiz
-                                            </button>
+                                            <span className="px-3 py-1.5 text-emerald-400 text-xs">
+                                                🔴 Currently Live
+                                            </span>
                                         )}
                                         {quiz.status === 'ended' && (
                                             <span className="px-3 py-1.5 text-slate-500 text-sm">

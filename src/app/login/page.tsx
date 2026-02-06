@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import PasswordInput from '@/components/PasswordInput';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -98,11 +99,9 @@ export default function LoginPage() {
                             <label className="block text-sm font-medium text-slate-300 mb-2">
                                 Password
                             </label>
-                            <input
-                                type="password"
+                            <PasswordInput
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="input"
                                 placeholder="Enter your password"
                                 required
                             />

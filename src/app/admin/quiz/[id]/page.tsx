@@ -59,14 +59,26 @@ export default function EditQuizPage() {
             const quiz: Quiz = data.quiz;
             setIsLocked(['live', 'ended'].includes(quiz.status));
 
+            // Format dates in local timezone for datetime-local input
+            // toISOString() returns UTC, we need local time format
+            const formatLocalDateTime = (dateStr: string) => {
+                const date = new Date(dateStr);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                return `${year}-${month}-${day}T${hours}:${minutes}`;
+            };
+
             setFormData({
                 questionNumber: quiz.questionNumber.toString(),
                 questionText: quiz.questionText,
                 optionA: quiz.optionA,
                 optionB: quiz.optionB,
                 correctOption: quiz.correctOption,
-                startTime: new Date(quiz.startTime).toISOString().slice(0, 16),
-                endTime: new Date(quiz.endTime).toISOString().slice(0, 16),
+                startTime: formatLocalDateTime(quiz.startTime),
+                endTime: formatLocalDateTime(quiz.endTime),
                 status: quiz.status,
                 correctPoints: quiz.correctPoints.toString(),
                 wrongPenalty: quiz.wrongPenalty.toString(),
@@ -84,11 +96,17 @@ export default function EditQuizPage() {
         setError('');
 
         try {
+            // Convert datetime-local values to proper ISO strings with timezone
+            const startTimeISO = formData.startTime ? new Date(formData.startTime).toISOString() : '';
+            const endTimeISO = formData.endTime ? new Date(formData.endTime).toISOString() : '';
+
             const res = await fetch(`/api/quiz/${quizId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
+                    startTime: startTimeISO,
+                    endTime: endTimeISO,
                     questionNumber: parseInt(formData.questionNumber),
                     correctPoints: parseInt(formData.correctPoints),
                     wrongPenalty: parseInt(formData.wrongPenalty),

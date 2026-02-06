@@ -29,11 +29,19 @@ export default function CreateQuizPage() {
         setError('');
 
         try {
+            // Convert datetime-local values to proper ISO strings with timezone
+            // datetime-local gives us "2026-02-07T00:50" which is interpreted as local time
+            // We need to create Date objects from these and convert to ISO strings
+            const startTimeISO = formData.startTime ? new Date(formData.startTime).toISOString() : '';
+            const endTimeISO = formData.endTime ? new Date(formData.endTime).toISOString() : '';
+
             const res = await fetch('/api/quiz', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
+                    startTime: startTimeISO,
+                    endTime: endTimeISO,
                     questionNumber: parseInt(formData.questionNumber),
                     correctPoints: parseInt(formData.correctPoints),
                     wrongPenalty: parseInt(formData.wrongPenalty),

@@ -28,10 +28,20 @@ export default function CreateMatchPage() {
         setError('');
 
         try {
+            // Convert datetime-local values to proper ISO strings with timezone
+            const matchDateISO = formData.matchDate ? new Date(formData.matchDate).toISOString() : '';
+            const predictionStartDateISO = formData.predictionStartDate ? new Date(formData.predictionStartDate).toISOString() : '';
+            const predictionDeadlineISO = formData.predictionDeadline ? new Date(formData.predictionDeadline).toISOString() : '';
+
             const res = await fetch('/api/matches', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    matchDate: matchDateISO,
+                    predictionStartDate: predictionStartDateISO,
+                    predictionDeadline: predictionDeadlineISO,
+                }),
             });
 
             const data = await res.json();

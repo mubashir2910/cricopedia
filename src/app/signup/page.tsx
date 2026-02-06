@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import PasswordInput from '@/components/PasswordInput';
 
 type Step = 'email' | 'otp' | 'password' | 'phone';
 
@@ -363,11 +364,9 @@ export default function SignupPage() {
                                 <label className="block text-sm font-medium text-slate-300 mb-2">
                                     Create Password
                                 </label>
-                                <input
-                                    type="password"
+                                <PasswordInput
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="input"
                                     placeholder="Min 6 characters"
                                     minLength={6}
                                 />
@@ -377,11 +376,9 @@ export default function SignupPage() {
                                 <label className="block text-sm font-medium text-slate-300 mb-2">
                                     Confirm Password
                                 </label>
-                                <input
-                                    type="password"
+                                <PasswordInput
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="input"
                                     placeholder="Re-enter password"
                                 />
                                 {confirmPassword && password !== confirmPassword && (
