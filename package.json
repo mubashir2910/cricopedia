@@ -12,6 +12,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/canvas-confetti": "^1.9.0",
     "@types/nodemailer": "^7.0.9",
+    "@vercel/analytics": "^1.6.1",
     "bcryptjs": "^3.0.3",
     "canvas-confetti": "^1.9.4",
     "framer-motion": "^12.31.2",
